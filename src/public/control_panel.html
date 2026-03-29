@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MeetDesk - Control Panel</title>
+    <link rel="stylesheet" href="css/control_panel.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css"
+        integrity="sha512-t7Few9xlddEmgd3oKZQahkNI4dS6l80+eGEzFQiqtyVYdvcSG2D3Iub77R20BdotfRPA9caaRkg1tyaJiPmO0g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+    <div class="app-shell">
+
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">Meet<span>Desk</span> <span id="version" style="color: white;"></span>
+                </div>
+                <div class="sidebar-subtitle">Control Panel</div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <span class="nav-section-label">Setup</span>
+                <button class="nav-item active" data-panel="panel-meets" onclick="App.navigate(this)">
+                    <i class="bi bi-floppy"></i> Meets
+                </button>
+                <button class="nav-item" data-panel="panel-teams" onclick="App.navigate(this)">
+                    <i class="bi bi-building"></i> Teams
+                </button>
+                <button class="nav-item" data-panel="panel-levels" onclick="App.navigate(this)">
+                    <i class="bi bi-layers"></i> Levels
+                </button>
+                <button class="nav-item" data-panel="panel-athletes" onclick="App.navigate(this)">
+                    <i class="bi bi-people"></i> Athletes
+                </button>
+                <button class="nav-item" data-panel="panel-events" onclick="App.navigate(this)">
+                    <i class="bi bi-grid-3x3"></i> Events
+                </button>
+
+                <span class="nav-section-label">Competition</span>
+                <button class="nav-item" data-panel="panel-scores" onclick="App.navigate(this)">
+                    <i class="bi bi-123"></i> Scores
+                </button>
+                <button class="nav-item" data-panel="panel-session" onclick="App.navigate(this)">
+                    <i class="bi bi-calendar3"></i> Session Builder
+                </button>
+
+                <span class="nav-section-label">Output</span>
+                <button class="nav-item" data-panel="panel-reports" onclick="App.navigate(this)">
+                    <i class="bi bi-file-earmark-bar-graph"></i> Reports
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="sidebar-footer-label">Server IP</div>
+                <div class="sidebar-footer-ip" id="server-ip">—</div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+
+            <div class="content-header">
+                <div>
+                    <div class="content-title" id="page-title">Meets</div>
+                    <div class="content-subtitle" id="page-subtitle">Import/export a meet file</div>
+                </div>
+                <div id="header-action-slot"></div>
+            </div>
+
+            <div class="content-body">
+
+                <div id="panel-meets" class="panel active">
+                    <div class="section-header">
+                        <span class="section-title">Meet File</span>
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: 16px; max-width: 480px;">
+
+                        <div class="card">
+                            <div class="card-header">
+                                <span class="card-header-title"><i class="bi bi-download"
+                                        style="margin-right: 6px;"></i>Save
+                                    Meet</span>
+                            </div>
+                            <div class="card-body">
+                                <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">
+                                    Export the current meet - teams, athletes, levels, events, and scores - to a <code
+                                        style="font-family: var(--font-mono); font-size: 12px; color: var(--accent);">.meet</code>
+                                    file on
+                                    your machine.
+                                </p>
+                                <button class="btn btn-success" onclick="Meets.save()">
+                                    <i class="bi bi-download"></i> Save Meet to File
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="card" style="border-color: rgba(245,101,101,0.2);">
+                            <div class="card-header" style="border-color: rgba(245,101,101,0.15);">
+                                <span class="card-header-title"><i class="bi bi-upload"
+                                        style="margin-right: 6px;"></i>Load Meet</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="alert alert-warning" style="margin-bottom: 16px;">
+                                    <i class="bi bi-exclamation-triangle-fill"></i>
+                                    <div>
+                                        <strong>This is a destructive action.</strong> Loading a meet file will
+                                        permanently wipe all current
+                                        data -
+                                        teams, athletes, levels, events, and scores - and replace it with the contents
+                                        of the selected file.
+                                        This cannot be undone.
+                                    </div>
+                                </div>
+                                <input type="file" id="import-input" accept=".meet,.db" style="display:none">
+                                <button class="btn btn-danger"
+                                    style="background: var(--red-dim); border-color: var(--red);"
+                                    onclick="Meets.load()">
+                                    <i class="bi bi-upload"></i> Load Meet from File
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div id="panel-teams" class="panel">
+                    <div class="section-header">
+                        <span class="section-title">All Teams</span>
+                        <button class="btn btn-primary btn-sm" onclick="Teams.toggleAddTeamForm()">
+                            <i class="bi bi-plus"></i> Add Team
+                        </button>
+                    </div>
+
+                    <div id="add-team-form" class="inline-form">
+                        <div class="inline-form-title">New Team</div>
+                        <form onsubmit="Teams.addTeam(event)">
+                            <div class="form-row">
+                                <div class="form-group wide">
+                                    <label class="form-label">Team Name *</label>
+                                    <input type="text" class="form-control" id="team-name"
+                                        placeholder="e.g. Apex Gymnastics" required>
+                                </div>
+                                <div class="form-group medium">
+                                    <label class="form-label">Team Code</label>
+                                    <input type="text" class="form-control" id="team-code" maxlength="10"
+                                        placeholder="e.g. APEX">
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-success"><i class="bi bi-check"></i> Save
+                                    Team</button>
+                                <button type="button" class="btn btn-ghost"
+                                    onclick="Teams.toggleAddTeamForm()">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="data-table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Team Name</th>
+                                    <th>Code</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="teams-tbody">
+                                <tr>
+                                    <td colspan="4">
+                                        <div class="empty-state"><i class="bi bi-hourglass"></i>
+                                            <p>Loading teams…</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="panel-athletes" class="panel">
+                    <div class="section-header">
+                        <span class="section-title">All Athletes</span>
+                        <button class="btn btn-primary btn-sm" onclick="Athletes.toggleAddAthleteForm()">
+                            <i class="bi bi-plus"></i> Add Athlete
+                        </button>
+                    </div>
+
+                    <div id="add-athlete-form" class="inline-form">
+                        <div class="inline-form-title">New Athlete</div>
+                        <form onsubmit="Athletes.addAthlete(event)">
+                            <div class="form-row">
+                                <div class="form-group narrow">
+                                    <label class="form-label">Bib #</label>
+                                    <input type="number" class="form-control" id="athlete-bib" required>
+                                    <div class="form-check">
+                                        <input type="checkbox" id="auto-bib" checked>
+                                        <label for="auto-bib">Auto-assign</label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">First Name *</label>
+                                    <input type="text" class="form-control" id="athlete-first" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Last Name *</label>
+                                    <input type="text" class="form-control" id="athlete-last" required>
+                                </div>
+                            </div>
+                            <div class="form-row" style="margin-top: 12px;">
+                                <div class="form-group medium">
+                                    <label class="form-label">Team</label>
+                                    <select class="form-select" id="athlete-team">
+                                        <option value="">Select Team</option>
+                                    </select>
+                                </div>
+                                <div class="form-group medium">
+                                    <label class="form-label">Division *</label>
+                                    <select class="form-select" id="athlete-division" required>
+                                        <option value="womens">Women's</option>
+                                        <option value="mens">Men's</option>
+                                    </select>
+                                </div>
+                                <div class="form-group medium">
+                                    <label class="form-label">Level *</label>
+                                    <select class="form-select" id="athlete-level" required>
+                                        <option value="">Select Level</option>
+                                    </select>
+                                </div>
+                                <div class="form-group narrow">
+                                    <label class="form-label">Session</label>
+                                    <input type="number" class="form-control" id="athlete-session" min="1">
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-success"><i class="bi bi-check"></i> Save
+                                    Athlete</button>
+                                <button type="button" class="btn btn-ghost"
+                                    onclick="Athletes.toggleAddAthleteForm()">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="filter-bar">
+                        <select class="form-select" id="filter-division" onchange="Athletes.load()">
+                            <option value="">All Divisions</option>
+                            <option value="womens">Women's</option>
+                            <option value="mens">Men's</option>
+                        </select>
+                        <select class="form-select" id="filter-team" onchange="Athletes.load()">
+                            <option value="">All Teams</option>
+                        </select>
+                    </div>
+
+                    <div class="data-table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Bib</th>
+                                    <th>Name</th>
+                                    <th>Team</th>
+                                    <th>Division</th>
+                                    <th>Level</th>
+                                    <th>Session</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="athletes-tbody">
+                                <tr>
+                                    <td colspan="7">
+                                        <div class="empty-state"><i class="bi bi-hourglass"></i>
+                                            <p>Loading athletes…</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="panel-events" class="panel">
+                    <div class="section-header">
+                        <span class="section-title">Events Configuration</span>
+                    </div>
+                    <div class="alert alert-info" style="margin-bottom: 20px;">
+                        <i class="bi bi-info-circle"></i>
+                        <span>Events are pre-configured based on standard gymnastics disciplines.</span>
+                    </div>
+                    <div class="events-grid">
+                        <div>
+                            <div class="event-group-title"><i class="bi bi-gender-female"></i> Women's Events</div>
+                            <div class="data-table-wrapper">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Order</th>
+                                            <th>Event</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="womens-events-tbody"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="event-group-title"><i class="bi bi-gender-male"></i> Men's Events</div>
+                            <div class="data-table-wrapper">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Order</th>
+                                            <th>Event</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="mens-events-tbody"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="panel-levels" class="panel">
+                    <div class="section-header">
+                        <span class="section-title">All Levels</span>
+                        <button class="btn btn-primary btn-sm" onclick="Levels.toggleAddLevelForm()">
+                            <i class="bi bi-plus"></i> Add Level
+                        </button>
+                    </div>
+
+                    <div id="add-level-form" class="inline-form">
+                        <div class="inline-form-title">New Level</div>
+                        <form onsubmit="Levels.addLevel(event)">
+                            <div class="form-row">
+                                <div class="form-group medium">
+                                    <label class="form-label">Level Name *</label>
+                                    <input type="text" class="form-control" id="level-name" placeholder="e.g. Level 8"
+                                        required>
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-success"><i class="bi bi-check"></i> Save
+                                    Level</button>
+                                <button type="button" class="btn btn-ghost"
+                                    onclick="Levels.toggleAddLevelForm()">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="data-table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Level Name</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="levels-tbody">
+                                <tr>
+                                    <td colspan="2">
+                                        <div class="empty-state"><i class="bi bi-hourglass"></i>
+                                            <p>Loading levels…</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="panel-scores" class="panel">
+                    <div class="section-header">
+                        <span class="section-title">Score Management</span>
+                    </div>
+
+                    <div class="alert alert-info" style="margin-bottom: 20px;">
+                        <i class="bi bi-tablet"></i>
+                        <span>Primary score entry is handled on judge tablets. Use this panel for corrections or manual
+                            overrides.</span>
+                    </div>
+
+                    <div class="card" style="margin-bottom: 24px;">
+                        <div class="card-header">
+                            <span class="card-header-title">Manual Score Entry</span>
+                        </div>
+                        <div class="card-body">
+                            <form onsubmit="Scores.addScore(event)">
+                                <div class="form-row">
+                                    <div class="form-group narrow">
+                                        <label class="form-label">Bib #</label>
+                                        <input type="number" class="form-control" id="score-athlete" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Event</label>
+                                        <select class="form-select" id="score-event" required>
+                                            <option value="">Select Event</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group narrow">
+                                        <label class="form-label">Score</label>
+                                        <input type="number" class="form-control" id="score-value" step="0.001" min="0"
+                                            max="20" placeholder="0.000" required>
+                                    </div>
+                                    <div class="form-group narrow">
+                                        <label class="form-label">Judge #</label>
+                                        <input type="number" class="form-control" id="score-judge" min="1" value="1"
+                                            required>
+                                    </div>
+                                    <div class="form-group narrow" style="justify-content: flex-end;">
+                                        <label class="form-label">&nbsp;</label>
+                                        <button type="submit" class="btn btn-success"><i class="bi bi-plus"></i>
+                                            Add</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="section-header">
+                        <span class="section-title" style="font-size: 14px;">Recent Scores</span>
+                    </div>
+                    <div class="data-table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Bib</th>
+                                    <th>Athlete</th>
+                                    <th>Event</th>
+                                    <th>Score</th>
+                                    <th>Judge</th>
+                                    <th>Time</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="scores-tbody">
+                                <tr>
+                                    <td colspan="7">
+                                        <div class="empty-state"><i class="bi bi-dash-circle"></i>
+                                            <p>No scores entered yet</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="panel-session" class="panel">
+                    <div class="section-header">
+                        <span class="section-title">Session Builder</span>
+                    </div>
+                    <div class="placeholder-state">
+                        <i class="bi bi-calendar3"></i>
+                        <h3>Coming Soon</h3>
+                        <p>Session builder will allow you to organize athletes and events into timed competition
+                            sessions.</p>
+                    </div>
+                </div>
+
+                <div id="panel-reports" class="panel">
+
+                    <div class="section-header" style="margin-bottom: var(--space-4);">
+                        <span class="section-title">Awards</span>
+                    </div>
+                    <div class="reports-grid" style="margin-bottom: var(--space-8);">
+
+                        <div class="report-card">
+                            <div class="report-card-header">
+                                <i class="bi bi-trophy" style="color: var(--green);"></i>
+                                <div>
+                                    <div class="report-card-header-title">Event Awards</div>
+                                    <div class="report-card-header-sub">Top scores per apparatus</div>
+                                </div>
+                            </div>
+                            <div class="report-card-body">
+                                <form action="api/reports/event_awards" method="GET" target="_blank">
+                                    <div class="form-group" style="margin-bottom: 12px;">
+                                        <label class="form-label">Level</label>
+                                        <select name="level_id" class="form-select" required
+                                            id="reports_eventawards_level_id">
+                                            <option value="">Select Level</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group" style="margin-bottom: 12px;">
+                                        <label class="form-label">Division</label>
+                                        <select name="division" class="form-select" required
+                                            id="reports-event-awards-division">
+                                            <option value="womens">Women's</option>
+                                            <option value="mens">Men's</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group" style="margin-bottom: 16px;">
+                                        <label class="form-label"># Places</label>
+                                        <input type="number" min="1" max="50" class="form-control" name="top" value="3"
+                                            step="1" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-success" style="width: 100%;">
+                                        <i class="bi bi-box-arrow-up-right"></i> Generate Report
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="report-card">
+                            <div class="report-card-header">
+                                <i class="bi bi-award" style="color: var(--accent);"></i>
+                                <div>
+                                    <div class="report-card-header-title">Team Awards</div>
+                                    <div class="report-card-header-sub">Cumulative team scores</div>
+                                </div>
+                            </div>
+                            <div class="report-card-body">
+                                <form action="api/reports/team_awards" method="GET" target="_blank">
+                                    <div class="form-group" style="margin-bottom: 12px;">
+                                        <label class="form-label">Level</label>
+                                        <select name="level_id" class="form-select" required
+                                            id="reports_teamawards_level_id">
+                                            <option value="">Select Level</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group" style="margin-bottom: 12px;">
+                                        <label class="form-label">Division</label>
+                                        <select name="division" class="form-select" required
+                                            id="reports-team-awards-division">
+                                            <option value="womens">Women's</option>
+                                            <option value="mens">Men's</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group" style="margin-bottom: 16px;">
+                                        <label class="form-label">Top Counting Scores</label>
+                                        <input type="number" min="1" max="50" class="form-control" name="counting"
+                                            value="3" step="1" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                                        <i class="bi bi-box-arrow-up-right"></i> Generate Report
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="section-header" style="margin-bottom: var(--space-4);">
+                        <span class="section-title">Rosters</span>
+                    </div>
+                    <div class="reports-grid">
+
+                        <div class="report-card">
+                            <div class="report-card-header">
+                                <i class="bi bi-people" style="color: var(--yellow);"></i>
+                                <div>
+                                    <div class="report-card-header-title">Meet Roster</div>
+                                    <div class="report-card-header-sub">All registered athletes</div>
+                                </div>
+                            </div>
+                            <div class="report-card-body">
+                                <form action="api/reports/meet_roster" method="GET" target="_blank">
+                                    <div class="form-group" style="margin-bottom: 12px;">
+                                        <label class="form-label">Group By</label>
+                                        <select name="group_by" class="form-select" id="reports-roster-groupby">
+                                            <option value="team">Team</option>
+                                            <option value="level">Level</option>
+                                            <option value="division">Division</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group" style="margin-bottom: 16px;">
+                                        <label class="form-label">Division</label>
+                                        <select name="division" class="form-select" id="reports-roster-division">
+                                            <option value="all">All</option>
+                                            <option value="womens">Women's</option>
+                                            <option value="mens">Men's</option>
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="btn btn-ghost"
+                                        style="width: 100%; border-color: var(--yellow); color: var(--yellow);">
+                                        <i class="bi bi-box-arrow-up-right"></i> Generate Report
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const API_BASE = '';
+
+        const App = {
+            pages: {
+                'panel-meets': { title: 'Meets', subtitle: 'Import/export a meet file', onLoad: () => { } },
+                'panel-teams': { title: 'Teams', subtitle: 'Manage competing teams', onLoad: () => Teams.load() },
+                'panel-athletes': { title: 'Athletes', subtitle: 'Manage registered athletes', onLoad: () => Athletes.load() },
+                'panel-events': { title: 'Events', subtitle: 'Pre-configured event disciplines', onLoad: () => Events.load() },
+                'panel-levels': { title: 'Levels', subtitle: 'Manage competition levels', onLoad: () => Levels.load() },
+                'panel-scores': { title: 'Scores', subtitle: 'Review and manually enter scores', onLoad: () => Scores.load() },
+                'panel-session': { title: 'Session Builder', subtitle: 'Organize competition sessions', onLoad: () => { } },
+                'panel-reports': { title: 'Reports', subtitle: 'Generate awards and results', onLoad: () => Reports.load() },
+            },
+
+            navigate(navBtn) {
+                const panelId = navBtn.dataset.panel;
+
+                document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+                navBtn.classList.add('active');
+
+                document.querySelectorAll('.panel').forEach(el => el.classList.remove('active'));
+                document.getElementById(panelId).classList.add('active');
+
+                const page = App.pages[panelId];
+                if (page) {
+                    document.getElementById('page-title').textContent = page.title;
+                    document.getElementById('page-subtitle').textContent = page.subtitle;
+                    page.onLoad();
+                }
+            }
+        };
+
+        document.getElementById('auto-bib').addEventListener('change', function () {
+            const bibInput = document.getElementById('athlete-bib');
+            if (this.checked) {
+                bibInput.disabled = true;
+                if (typeof Athletes !== 'undefined') Athletes.updateBibNumber();
+            } else {
+                bibInput.disabled = false;
+                bibInput.focus();
+            }
+        });
+
+        window.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const res = await fetch(`${API_BASE}/api/info`);
+                const info = await res.json();
+
+                document.getElementById('version').textContent = `v${Math.floor(info.version / 100)}.${info.version % 100}`;
+                document.getElementById('server-ip').textContent = info.ips[0] && info.port ? `${info.ips[0]}:${info.port}` : '—'
+            } catch (err) {
+                console.error('Error loading info:', err);
+            }
+        });
+    </script>
+
+    <script src="js/utils.js"></script>
+    <script src="js/teams.js"></script>
+    <script src="js/levels.js"></script>
+    <script src="js/athletes.js"></script>
+    <script src="js/events.js"></script>
+    <script src="js/scores.js"></script>
+    <script src="js/reports.js"></script>
+    <script src="js/meets.js"></script>
+</body>
+
+</html>

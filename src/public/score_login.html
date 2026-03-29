@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MeetDesk - Judge Login</title>
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css"
+        integrity="sha512-t7Few9xlddEmgd3oKZQahkNI4dS6l80+eGEzFQiqtyVYdvcSG2D3Iub77R20BdotfRPA9caaRkg1tyaJiPmO0g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="css/control_panel.css">
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-base);
+        }
+
+        .login-wrap {
+            width: 100%;
+            max-width: 420px;
+            padding: 24px;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 36px;
+        }
+
+        .login-logo {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+            margin-bottom: 4px;
+        }
+
+        .login-logo span {
+            color: var(--accent);
+        }
+
+        .login-tagline {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .login-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+        }
+
+        .login-card-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 24px;
+        }
+
+        .login-card .form-group {
+            margin-bottom: 18px;
+        }
+
+        .login-card .btn {
+            width: 100%;
+            padding: 12px;
+            font-size: 14px;
+            justify-content: center;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-wrap">
+        <div class="login-header">
+            <div class="login-logo">Meet<span>Desk</span></div>
+            <div class="login-tagline">Judge Score Entry</div>
+        </div>
+
+        <div class="login-card">
+            <div class="login-card-title">Select your event &amp; judge number</div>
+            <form onsubmit="login(event)">
+                <div class="form-group">
+                    <label class="form-label">Event</label>
+                    <select class="form-select" id="login-event" required>
+                        <option value="">Loading events…</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Judge Number</label>
+                    <input type="number" class="form-control" id="login-judge" min="1" value="1" required>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-box-arrow-in-right"></i> Enter Scoring
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = '';
+        let eventsList = [];
+
+        async function loadEvents() {
+            try {
+                const res = await fetch(`${API_BASE}/api/events`);
+                const events = await res.json();
+                eventsList = events;
+
+                const select = document.getElementById('login-event');
+                select.innerHTML = '<option value="">Select Event</option>';
+                events.forEach(ev => {
+                    const opt = document.createElement('option');
+                    opt.value = ev.id;
+                    opt.textContent = `${ev.name} (${ev.division === 'womens' ? 'W' : 'M'})`;
+                    select.appendChild(opt);
+                });
+            } catch (err) {
+                console.error('Error loading events:', err);
+                document.getElementById('login-event').innerHTML = '<option value="">Failed to load events</option>';
+            }
+        }
+
+        function login(e) {
+            e.preventDefault();
+            const eventId = parseInt(document.getElementById('login-event').value);
+            const judgeNumber = parseInt(document.getElementById('login-judge').value);
+            const ev = eventsList.find(e => e.id === eventId);
+
+            localStorage.setItem('event_id', eventId);
+            localStorage.setItem('judge_number', judgeNumber);
+            localStorage.setItem('event_name', `${ev.name} (${ev.division === 'womens' ? 'W' : 'M'})`);
+
+            window.location.href = '/score_entry.html';
+        }
+
+        window.addEventListener('DOMContentLoaded', loadEvents);
+    </script>
+</body>
+
+</html>
