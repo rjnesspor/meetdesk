@@ -1,16 +1,38 @@
 {
-  "name": "new",
+  "name": "meetdesk",
   "version": "1.0.0",
-  "description": "",
+  "description": "Competition management for gymnastics meets",
   "main": "main.js",
+  "author": "rjnesspor",
+  "license": "ISC",
   "scripts": {
     "start": "electron .",
     "dist": "electron-builder",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "build": {
+    "appId": "app.meetdesk",
+    "productName": "MeetDesk",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "assets/meetdesk.ico"
+    },
+    "nsis": {
+      "oneClick": true,
+      "installerIcon": "assets/meetdesk.ico",
+      "uninstallerIcon": "assets/meetdesk.ico",
+      "deleteAppDataOnUninstall": false
+    },
+    "files": [
+      "**/*",
+      "!docs/**",
+      "!dist/**",
+      "!*.md"
+    ]
+  },
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^5.2.1",
@@ -19,6 +41,6 @@
   },
   "devDependencies": {
     "electron": "^41.1.0",
-    "electron-builder": "^26.8.1"
+    "electron-builder": "^26.0.0"
   }
 }
