@@ -52,7 +52,14 @@ app.get('/api/info', (req, res) => {
     const os = require('os');
     const nets = os.networkInterfaces();
     const ips = Object.values(nets).flat().filter(n => n.family === 'IPv4' && !n.internal).map(n => n.address);
-    res.json({ ips, version: req.app.locals.schema_version_int, port: PORT });
+    req.app.locals.db.get('PRAGMA application_id', (err, row) => {
+        const firstLoad = row.application_id === 0;
+        if (firstLoad) {
+            req.app.locals.db.run('PRAGMA application_id = 1296649044'); // 0x4d454554 - MEET in ascii :)
+        }
+        res.json({ ips, version: req.app.locals.schema_version_int, port: PORT, firstLoad });
+    })
+
 })
 
 const server = app.listen(PORT, () => {

@@ -638,7 +638,14 @@
                 const info = await res.json();
 
                 document.getElementById('version').textContent = `v${Math.floor(info.version / 100)}.${info.version % 100}`;
-                document.getElementById('server-ip').textContent = info.ips[0] && info.port ? `${info.ips[0]}:${info.port}` : '—'
+                document.getElementById('server-ip').textContent = info.ips[0] && info.port ? `${info.ips[0]}:${info.port}` : '-'
+                if (info.firstLoad) {
+                    Utils.Modal.show({
+                        title: 'Welcome to MeetDesk!',
+                        body: 'Looks like you\'re starting fresh. Check out the setup page of the docs to get started!',
+                        link: { url: 'https://meetdesk.app/docs/installation#step-3-set-up-your-meet', label: 'Take me there' }
+                    });
+                }
             } catch (err) {
                 console.error('Error loading info:', err);
             }
