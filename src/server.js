@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const { initDatabase, db } = require('./db/database');
 
 const app = express();
@@ -10,7 +11,7 @@ const SCHEMA_VERSION_INT = SCHEMA_VERSION.major * 100 + SCHEMA_VERSION.minor;
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, 'public')));
 
 initDatabase(SCHEMA_VERSION_INT);
 
