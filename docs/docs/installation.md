@@ -6,7 +6,7 @@ sidebar_label: Installation Guide
 
 ## Step 1: Download MeetDesk
 
-Go to the [MeetDesk releases page](https://github.com/your-repo/meetdesk/releases) and download the latest installer for your platform.
+Go to the [MeetDesk releases page](https://github.com/rjnesspor/meetdesk/releases) and download the latest installer for your platform.
 
 - **Windows** - download the `.exe` installer and run it
 
@@ -22,7 +22,7 @@ MeetDesk currently supports Windows. macOS support is planned for a future relea
 
 Open MeetDesk. The app will start a local server automatically in the background - you don't need to do anything.
 
-The **Control Panel** will open on your screen. In the bottom-left corner you'll see the server's local IP address, something like `192.168.1.42`. Write this down and keep it handy, since you'll need it to set up judge tablets and display screens.
+The **Control Panel** will open on your screen. In the bottom-left corner you'll see the server's local IP address. Write this down and keep it handy, since you'll need it to set up judge tablets and display screens.
 
 :::tip
 Make sure your laptop is connected to the same Wi-Fi network that your judge tablets and display screens will use. MeetDesk works entirely over the local network.
@@ -99,7 +99,3 @@ Each report opens as a PDF in a new tab and can be printed directly.
 ## Saving and loading a meet
 
 MeetDesk lets you save your entire meet - teams, athletes, scores, and all - to a single `.meet` file. You can find this option in the **Meet** section of the Control Panel.
-
-:::warning
-Loading a `.meet` file will completely replace all current data. Make sure you save first if you want to keep what you have.
-:::

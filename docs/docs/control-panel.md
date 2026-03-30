@@ -18,6 +18,10 @@ The Meets page allows you to import or export a `.meet` file. Simply put, a `.me
 
 Suppose you'd like to transfer your meet data from one computer to another. All you need to do is `Save Meet to File` on the computer with the meet data, generating a `.meet` file. Then, transfer that file to the other computer and `Load Meet from File`. Voila!
 
+:::danger
+Loading a meet from a file will erase whatever data you currently have loaded. Make sure to back up your data!
+:::
+
 ## Teams
 
 The Teams page is where you can manage the different teams competing in your meet. Teams are used to categorize athletes. 
