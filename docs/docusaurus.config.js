@@ -62,18 +62,10 @@ const config = {
                         position: 'left',
                         label: 'Docs',
                     },
-                    {
-                        href: 'https://github.com/rjnesspor/meetdesk', // TODO: replace
-                        label: 'GitHub',
-                        position: 'right',
-                    },
                 ],
             },
 
-            footer: {
-                style: 'dark',
-                copyright: `© ${new Date().getFullYear()} MeetDesk`,
-            },
+            footer: undefined,
 
             prism: {
                 theme: themes.oneDark,
