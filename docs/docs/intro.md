@@ -4,26 +4,16 @@ sidebar_label: Welcome!
 
 # Welcome to MeetDesk!
 
-MeetDesk is an open-source management tool for gymnastics meets. It runs entirely on a local network - no internet connection, no cloud account, no annual subscription!
+MeetDesk is an entirely free, open-source management tool for gymnastics meets. It runs entirely on a local network - no internet connection, no cloud account, no annual subscription!
 
-I created MeetDesk because I was frustrated with the lack of free options for meet directors. Small gyms shouldn't be held back just because they can't afford scoring software or iPad licenses, and now they don't have to!
+I created MeetDesk because I was frustrated with the lack of free options for meet directors. Small gyms shouldn't be held back just because they can't afford scoring software or iPad licenses. 
 
-*MeetDesk is **free** and open source, and always will be.*
+I am always available for a demo or support. If you decide to host a meet with MeetDesk, please let me know! I would be happy to provide on-call help.
 
----
+I will always accept feedback about MeetDesk. If you love or hate something, I would love to hear about it. Please tell me!
 
-## How it works
-
-MeetDesk runs as a small server on the meet director's laptop. Once it's running, every other device at the meet connects to it through a web browser on the local network. Nothing needs to be installed on those devices.
-
----
-
-## What's included
-
-- **Control Panel** - manage teams, athletes, levels, events, and scores from the meet director's computer
-- **Judge Score Entry** - a touch-friendly browser page judges use to submit scores from a tablet
-- **Live Score Display** - a fullscreen display for TVs or projectors that shows scores as they come in
-- **PDF Reports** - generate event awards, team awards, and meet rosters
+\- Ryan <br/>
+(Support email coming soon)
 
 ---
 

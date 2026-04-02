@@ -22,13 +22,8 @@ export default function Home() {
                         Meet<span className={styles.accent}>Desk</span>
                     </h1>
                     <p className={styles.hook}>
-                        I'm a gymnastics judge and CS student.
+                        Free gymnastics meet scoring software.
                     </p>
-                    <p className={styles.sub}>
-                        I got tired of watching meet directors deal with expensive meet software, so I built this -
-                        free, no subscriptions.
-                    </p>
-                    <p className={styles.byline}>- Ryan Nesspor</p>
                     <div className={styles.actions}>
                         <Link className={styles.btnPrimary} to="/docs/intro">
                             Get Started
